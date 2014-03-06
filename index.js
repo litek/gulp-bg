@@ -14,7 +14,8 @@ var Child = function(cmd, args) {
 
 Child.prototype.start = function() {
   if (this.running) return;
-  this.log("Starting "+this.cmd+" "+this.args.join(" "));
+  var sig = "["+colors.green("bg")+"]";
+  console.log(sig, "Starting", this.cmd, this.args.join(" "));
 
   this.proc = spawn(this.cmd, this.args);
 
@@ -44,7 +45,7 @@ Child.prototype.exit = function(code) {
 
 Child.prototype.log = function(buff) { 
   var msg = buff.toString().trim();
-  var sig = "["+colors.green("bg")+"]";
+  var sig = "["+colors.gray("bg")+"]";
   console.log(sig, msg);
 };
 
