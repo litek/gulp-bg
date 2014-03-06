@@ -1,0 +1,22 @@
+{
+  "name": "gulp-bg",
+  "version": "0.0.1",
+  "description": "Spawn a process in the background",
+  "homepage": "https://github.com/litek/gulp-bg",
+  "repository": "https://github.com/litek/gulp-bg.git",
+  "keywords": [
+    "gulpplugin"
+  ],
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ],
+  "dependencies": {
+    "chalk": "~0.4.0"
+  },
+  "devDependencies": {
+    "gulp": "~3.5.5",
+    "gulp-jshint": "~1.5.0"
+  }
+}
