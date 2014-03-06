@@ -5,6 +5,11 @@ var spawn = require("child_process").spawn,
 var Child = function(cmd, args) {
   this.cmd = cmd;
   this.args = args;
+
+  process.on("exit", function() {
+    if (!this.running) return;
+    this.proc.kill("SIGTERM");
+  }.bind(this));
 };
 
 Child.prototype.start = function() {
