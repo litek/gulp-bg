@@ -58,6 +58,10 @@ Child.prototype.err = function(buff) {
 };
 
 var plugin = module.exports = function(cmd, args) {
+  if (!(args instanceof Array)) {
+    args = Array.prototype.slice.call(arguments, 1);
+  }
+  
   var child = new Child(cmd, args);
 
   return child.restart.bind(child);
