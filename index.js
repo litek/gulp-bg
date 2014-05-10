@@ -17,10 +17,8 @@ Child.prototype.start = function() {
   var sig = "["+colors.green("bg")+"]";
   console.log(sig, "Starting", this.cmd, this.args.join(" "));
 
-  this.proc = spawn(this.cmd, this.args);
+  this.proc = spawn(this.cmd, this.args, { stdio: 'inherit' });
 
-  this.proc.stdout.on("data", this.log);
-  this.proc.stderr.on("data", this.err);
   this.proc.on("exit", this.exit.bind(this));
 
   this.running = true;
@@ -38,22 +36,9 @@ Child.prototype.restart = function() {
 };
 
 Child.prototype.exit = function(code) {
-  var fn = code === 0 ? "log" : "err";
-  this[fn]("Exited with code "+code);
   this.running = false;
-};
-
-Child.prototype.log = function(buff) { 
-  var msg = buff.toString().trim();
-  var sig = "["+colors.gray("bg")+"]";
-  console.log(sig, msg);
-};
-
-Child.prototype.err = function(buff) {
-  var msg = buff.toString().trim();
-  var sig = "["+colors.red("bg")+"]";
-
-  if (!msg) return;
+  var msg = "Exited with code "+code;
+  var sig = "["+colors[code === 0 ? "gray" : "red"]("bg")+"]";
   console.log(sig, msg);
 };
 
@@ -61,7 +46,7 @@ var plugin = module.exports = function(cmd, args) {
   if (!(args instanceof Array)) {
     args = Array.prototype.slice.call(arguments, 1);
   }
-  
+
   var child = new Child(cmd, args);
 
   return child.restart.bind(child);
