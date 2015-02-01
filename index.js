@@ -10,6 +10,10 @@ var Child = function(cmd, args) {
     if (!this.running) return;
     this.proc.kill("SIGTERM");
   }.bind(this));
+
+  process.on("SIGTERM", function() {
+    process.exit();
+  });
 };
 
 Child.prototype.start = function() {
