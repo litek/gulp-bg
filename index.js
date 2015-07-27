@@ -39,6 +39,10 @@ Child.prototype.restart = function() {
   this.proc.kill("SIGTERM");
 };
 
+Child.prototype.stop = function() {
+  this.proc.kill("SIGTERM");
+};
+
 Child.prototype.exit = function(code) {
   this.running = false;
   var msg = "Exited with code "+code;
@@ -53,5 +57,12 @@ var plugin = module.exports = function(cmd, args) {
 
   var child = new Child(cmd, args);
 
-  return child.restart.bind(child);
+  var fn = child.restart.bind(child);
+  fn.stop = child.stop.bind(child);
+
+  return Object.defineProperty(fn, 'proc', {
+    get: function() {
+      return child.proc;
+    }
+  });
 };
