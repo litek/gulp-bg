@@ -5,6 +5,7 @@ var spawn = require("child_process").spawn,
 var Child = function(cmd, args) {
   this.cmd = cmd;
   this.args = args;
+  this.errorcode = 0;
 
   process.on("exit", function() {
     if (!this.running) return;
@@ -45,10 +46,18 @@ Child.prototype.stop = function() {
 
 Child.prototype.exit = function(code) {
   this.running = false;
+  this.errorcode = code;
   var msg = "Exited with code "+code;
   var sig = "["+colors[code === 0 ? "gray" : "red"]("bg")+"]";
   console.log(sig, msg);
+  if (this.cb) {
+    this.cb(this);
+  }
 };
+
+Child.prototype.setCallback = function(cb) {
+  this.cb = cb;
+}
 
 var plugin = module.exports = function(cmd, args) {
   if (!(args instanceof Array)) {
@@ -59,6 +68,7 @@ var plugin = module.exports = function(cmd, args) {
 
   var fn = child.restart.bind(child);
   fn.stop = child.stop.bind(child);
+  fn.setCallback = child.setCallback.bind(child);
 
   return Object.defineProperty(fn, 'proc', {
     get: function() {
