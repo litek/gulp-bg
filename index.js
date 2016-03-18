@@ -49,7 +49,7 @@ Child.prototype.exit = function(code) {
   if(code != null)
     this.errorcode = code;
   var msg = "Exited with code " + this.errorcode;
-  var sig = "["+colors[code === 0 ? "gray" : "red"]("bg")+"]";
+  var sig = "["+colors[this.errorcode === 0 ? "gray" : "red"]("bg")+"]";
   console.log(sig, msg);
   if (this.cb) {
     this.cb(this);
