@@ -1,6 +1,6 @@
 {
   "name": "gulp-bg",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Spawn a process in the background",
   "homepage": "https://github.com/litek/gulp-bg",
   "repository": "https://github.com/litek/gulp-bg.git",
