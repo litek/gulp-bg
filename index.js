@@ -1,8 +1,10 @@
 "use strict";
 var spawn = require("child_process").spawn,
-    colors = require("chalk");
+    colors = require("chalk"),
+    assign = require("object-assign");
 
-var Child = function(cmd, args) {
+var Child = function(cmd, args, opts) {
+  this.opts = assign({ stdio: 'inherit' }, opts);
   this.cmd = cmd;
   this.args = args;
   this.errorcode = 0;
@@ -22,7 +24,7 @@ Child.prototype.start = function() {
   var sig = "["+colors.green("bg")+"]";
   console.log(sig, "Starting", this.cmd, this.args.join(" "));
 
-  this.proc = spawn(this.cmd, this.args, { stdio: 'inherit' });
+  this.proc = spawn(this.cmd, this.args, this.opts);
 
   this.proc.on("exit", this.exit.bind(this));
 
