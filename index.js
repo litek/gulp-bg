@@ -79,3 +79,21 @@ var plugin = module.exports = function(cmd, args) {
     }
   });
 };
+
+plugin.bgplus = function(cmd, args, opts) {
+  if (!(args instanceof Array)) {
+    args = [args];
+  }
+
+  var child = new Child(cmd, args, opts);
+
+  var fn = child.restart.bind(child);
+  fn.stop = child.stop.bind(child);
+  fn.setCallback = child.setCallback.bind(child);
+
+  return Object.defineProperty(fn, 'proc', {
+    get: function() {
+      return child.proc;
+    }
+  });
+}
