@@ -2,9 +2,10 @@
 var spawn = require("child_process").spawn,
     colors = require("chalk");
 
-var Child = function(cmd, args) {
+var Child = function(cmd, args, opts) {
   this.cmd = cmd;
   this.args = args;
+  this.opts = opts || {};
   this.errorcode = 0;
 
   process.on("exit", function() {
@@ -22,7 +23,11 @@ Child.prototype.start = function() {
   var sig = "["+colors.green("bg")+"]";
   console.log(sig, "Starting", this.cmd, this.args.join(" "));
 
-  this.proc = spawn(this.cmd, this.args, { stdio: 'inherit' });
+  if(typeof this.opts.stdio === 'undefined') {
+    this.opts.stdio = 'inherit';
+  }
+
+  this.proc = spawn(this.cmd, this.args, this.opts);
 
   this.proc.on("exit", this.exit.bind(this));
 
@@ -60,12 +65,8 @@ Child.prototype.setCallback = function(cb) {
   this.cb = cb;
 }
 
-var plugin = module.exports = function(cmd, args) {
-  if (!(args instanceof Array)) {
-    args = Array.prototype.slice.call(arguments, 1);
-  }
-
-  var child = new Child(cmd, args);
+var plugin = module.exports = function(cmd, args, opts) {
+  var child = new Child(cmd, args, opts);
 
   var fn = child.restart.bind(child);
   fn.stop = child.stop.bind(child);

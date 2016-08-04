@@ -10,7 +10,7 @@ Run a process in the background, and restart on changes.
 var bg = require("gulp-bg");
 
 let bgtask;
-gulp.task("server", bgtask = bg("node", "--harmony", "server.js"));
+gulp.task("server", bgtask = bg("node", ["--harmony", "server.js"], { "env": process.env }));
 
 const exitCallback = (proc) => { if (proc.errorcode != 0) { process.exit(proc.errorcode); } };
 
