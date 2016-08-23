@@ -5,6 +5,7 @@ var spawn = require("child_process").spawn,
 var Child = function(cmd, args) {
   this.cmd = cmd;
   this.args = args;
+  this.opts = (this.args[this.args.length - 1] instanceof Object) ? this.args.pop() : {};
   this.errorcode = 0;
 
   process.on("exit", function() {
@@ -20,9 +21,11 @@ var Child = function(cmd, args) {
 Child.prototype.start = function() {
   if (this.running) return;
   var sig = "["+colors.green("bg")+"]";
-  console.log(sig, "Starting", this.cmd, this.args.join(" "));
+  this.opts.stdio = 'inherit';
+  
+  console.log(sig, "Starting", this.cmd, this.args.join(" "), JSON.stringify(this.opts));
 
-  this.proc = spawn(this.cmd, this.args, { stdio: 'inherit' });
+  this.proc = spawn(this.cmd, this.args, this.opts);
 
   this.proc.on("exit", this.exit.bind(this));
 
