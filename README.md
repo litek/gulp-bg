@@ -25,5 +25,20 @@ gulp.task("default", ["server"], function() {
 });
 ```
 
+## Ability to send options to spawn
+The final arguement should be an the spawn options object: 
+```
+{
+  cwd: undefined,
+  env: process.env
+}
+```
+
+(https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options)
+
+```javaScript
+gulp.task("server", bgtask = bg("node", "--harmony", "server.js", {env: 'development'}));
+```
+
 ## License
 MIT
